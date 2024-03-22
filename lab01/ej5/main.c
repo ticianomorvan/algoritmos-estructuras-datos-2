@@ -1,6 +1,5 @@
 /* First, the standard lib includes, alphabetically ordered */
 #include <assert.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "array_helpers.h"
@@ -30,7 +29,7 @@ char *parse_filepath(int argc, char *argv[]) {
     char *result = NULL;
     // Program takes exactly two arguments
     // (the program's name itself and the input-filepath)
-    bool valid_args_count = (argc == 2);
+    mybool valid_args_count = (argc == 2);
 
     if (!valid_args_count) {
         print_help(argv[0]);
@@ -54,8 +53,16 @@ int main(int argc, char *argv[]) {
     /* parse the file to fill the array and obtain the actual length */
     unsigned int length = array_from_file(array, MAX_SIZE, filepath);
 
+    mybool is_sorted = array_is_sorted(array, length);
+
     /*dumping the array*/
     array_dump(array, length);
+
+    if (is_sorted) {
+        printf("El arreglo está ordenado.\n");
+    } else {
+        printf("El arreglo no está ordenado.\n");
+    }
     
     return EXIT_SUCCESS;
 }

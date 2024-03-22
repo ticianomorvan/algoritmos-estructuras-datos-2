@@ -54,8 +54,16 @@ int main(int argc, char *argv[]) {
     /* parse the file to fill the array and obtain the actual length */
     unsigned int length = array_from_file(array, MAX_SIZE, filepath);
 
+    bool is_sorted = array_is_sorted(array, length);
+
     /*dumping the array*/
     array_dump(array, length);
+
+    if (is_sorted) {
+        printf("El arreglo está ordenado.\n");
+    } else {
+        printf("El arreglo no está ordenado.\n");
+    }
     
     return EXIT_SUCCESS;
 }

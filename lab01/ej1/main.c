@@ -41,28 +41,30 @@ char *parse_filepath(int argc, char *argv[]) {
     return result;
 }
 
-// TO-DO: throw on length larger than array length
 unsigned int array_from_file(int array[],
                              unsigned int max_size,
                              const char *filepath) {
     FILE *file = fopen(filepath, "r");
 
-    int array_length;
+    unsigned int array_length;
+    fscanf(file, "%u", &array_length);
 
-    for (unsigned int i = 0; i < max_size; i++) {
-        int value, length;
+    if (array_length > max_size) {
+        printf("The number of elements in the array exceeds the established limit: %d\n", max_size);
+        exit(EXIT_FAILURE);
+    }
 
-        if (i == 0) {
-            fscanf(file, "%d", &array_length);
-        } else {
-            length = fscanf(file, "%d", &value);
+    for (unsigned int i = 0; i < array_length; i++) {
+        int value;
+        int length = fscanf(file, "%d", &value);
+        bool is_eof = length == -1; 
 
-            if (length == -1) {
-                break;
-            }
-
-            array[i - 1] = value;
+        if (is_eof) {
+            printf("The number of elements in the array doesn't match the array length.\n");
+            exit(EXIT_FAILURE);
         }
+
+        array[i] = value;
     }
 
     return array_length;

@@ -24,25 +24,29 @@ void print_help(char *program_name) {
            program_name);
 }
 
-unsigned int array_from_stdin(int array[], unsigned int max_size) {
-    FILE *input = stdin;
+unsigned int array_from_stdin(int array[],
+                             unsigned int max_size) {
+    FILE *file = stdin;
 
-    int array_length;
+    unsigned int array_length;
+    fscanf(file, "%u", &array_length);
 
-    for (unsigned int i = 0; i < max_size; i++) {
-        int value, length;
+    if (array_length > max_size) {
+        printf("The number of elements in the array exceeds the established limit: %d\n", max_size);
+        exit(EXIT_FAILURE);
+    }
 
-        if (i == 0) {
-            fscanf(input, "%d", &array_length);
-        } else {
-            length = fscanf(input, "%d", &value);
+    for (unsigned int i = 0; i < array_length; i++) {
+        int value;
+        int length = fscanf(file, "%d", &value);
+        bool is_eof = length == -1; 
 
-            if (length == -1) {
-                break;
-            }
-
-            array[i - 1] = value;
+        if (is_eof) {
+            printf("The number of elements in the array doesn't match the array length.\n");
+            exit(EXIT_FAILURE);
         }
+
+        array[i] = value;
     }
 
     return array_length;
