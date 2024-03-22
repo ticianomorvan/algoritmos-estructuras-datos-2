@@ -26,13 +26,15 @@ void print_help(char *program_name) {
 
 unsigned int array_from_stdin(int array[],
                              unsigned int max_size) {
+    printf("Escribe los elementos que compondrán tu arreglo seguidos de espacios en blanco o saltos de línea. El primer número será el largo del arreglo a formar.\n");
+
     FILE *file = stdin;
 
     unsigned int array_length;
     fscanf(file, "%u", &array_length);
 
     if (array_length > max_size) {
-        printf("The number of elements in the array exceeds the established limit: %d\n", max_size);
+        printf("El número de elementos es mayor al máximo establecido: %d\n", max_size);
         exit(EXIT_FAILURE);
     }
 
@@ -42,7 +44,7 @@ unsigned int array_from_stdin(int array[],
         bool is_eof = length == -1; 
 
         if (is_eof) {
-            printf("The number of elements in the array doesn't match the array length.\n");
+            printf("El número de elementos es menor al largo del arreglo especificado.\n");
             exit(EXIT_FAILURE);
         }
 
