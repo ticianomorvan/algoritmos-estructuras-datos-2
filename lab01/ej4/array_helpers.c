@@ -53,8 +53,12 @@ void array_dump(int a[], unsigned int length) {
 bool array_is_sorted(int array[], unsigned int length) {
     bool is_sorted = true;
 
-    for (unsigned int i = 1; i < length; i++) {
-        is_sorted = is_sorted && array[i] >= array[i - 1];
+    if (length == 0) {
+        is_sorted = false;
+    } else {
+        for (unsigned int i = 1; i < length && is_sorted; i++) {
+            is_sorted = is_sorted && array[i] >= array[i - 1];
+        }
     }
 
     return is_sorted;
