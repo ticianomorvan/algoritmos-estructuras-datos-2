@@ -1,6 +1,7 @@
 {
   "C_Cpp.default.compilerPath": "/usr/bin/gcc",
   "files.associations": {
-    "array_helpers.h": "c"
+    "array_helpers.h": "c",
+    "sort_helpers.h": "c"
   }
 }
