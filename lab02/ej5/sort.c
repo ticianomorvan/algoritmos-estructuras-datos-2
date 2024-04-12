@@ -10,11 +10,38 @@
 
 
 static unsigned int partition(fixstring a[], unsigned int izq, unsigned int der) {
-    /* copiá acá la implementación que hiciste en el ejercicio 3 */
+    int i, j, pivot;
+    pivot = izq;
+    i = izq + 1;
+    j = der;
+
+    while (i <= j) {
+        if (goes_before(a[i], a[pivot])) {
+            i = i + 1;
+        } else if (goes_before(a[pivot], a[j])) {
+            j = j - 1;
+        } else if (goes_before(a[pivot], a[i]) && goes_before(a[j], a[pivot])) {
+            swap(a, i, j);
+            i = i + 1;
+            j = j - 1;
+        }
+    }
+
+    swap(a, pivot, j);
+    pivot = j;
+
+    return pivot;
 }
 
 static void quick_sort_rec(fixstring a[], unsigned int izq, unsigned int der) {
-    /* copiá acá la implementación que hiciste en el ejercicio 3 */
+    unsigned int pivot;
+
+    if (der > izq) {
+        pivot = partition(a, izq, der);
+
+        quick_sort_rec(a, izq, (pivot == 0u) ? 0u : pivot - 1);
+        quick_sort_rec(a, pivot + 1, der);
+    }
 }
 
 void quick_sort(fixstring a[], unsigned int length) {
