@@ -32,31 +32,23 @@ bool fstring_eq(fixstring s1, fixstring s2) {
     return is_equal;
 }
 
-/*
-    NOTA: si dos palabras tienen un segmento inicial idéntico,
-    aunque la segunda es más larga que la primera, dará verdadero.
-    Ejemplo: 'automovil' "resulta ser" menor o igual a 'auto', cuando debería ser mayor. 
-*/
 bool fstring_less_eq(fixstring s1, fixstring s2) {
-    int i = 0;
+    bool is_less_or_equal = false;
+    unsigned int smaller_length, s1_length, s2_length;
 
-    while (s1[i] != '\0' && s2[i] != '\0') {
-        if (s1[i] < s2[i]) {
-            return true;
-        } else if (s1[i] > s2[i]) {
-            return false;
+    s1_length = fstring_length(s1);
+    s2_length = fstring_length(s2);
+    smaller_length = s1_length >= s2_length ? s2_length : s1_length;
+
+    for (unsigned int i = 0; i <= smaller_length; i++) {
+        if (s1[i] > s2[i]) {
+            break;
         }
 
-        i++;
-    }
+        is_less_or_equal = true;
+    } 
 
-    if (s1[i] == '\0' && s2[i] != '\0') {
-        return true;
-    } else if (s1[i] != '\0' && s2[i] == '\0') {
-        return false;
-    }
-
-    return true;
+    return is_less_or_equal;
 }
 
 void fstring_set(fixstring s1, const fixstring s2) {

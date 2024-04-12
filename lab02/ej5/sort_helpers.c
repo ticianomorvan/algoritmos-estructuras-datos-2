@@ -12,7 +12,16 @@ void swap(fixstring a[], unsigned int i, unsigned int j) {
 }
 
 bool goes_before(fixstring x, fixstring y) {
-    return fstring_less_eq(x, y);
+    int x_length, y_length;
+
+    x_length = fstring_length(x);
+    y_length = fstring_length(y);
+
+    if (x_length == y_length) {
+        return fstring_less_eq(x, y);
+    }
+
+    return x_length <= y_length;
 }
 
 bool array_is_sorted(fixstring array[], unsigned int length) {
