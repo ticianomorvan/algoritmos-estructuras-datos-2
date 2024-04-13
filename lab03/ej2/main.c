@@ -10,6 +10,7 @@
 
 /* Then, this project's includes, alphabetically ordered */
 #include "array_helpers.h"
+#include "weather_utils.h"
 
 /**
  * @brief print usage help
@@ -72,6 +73,9 @@ int main(int argc, char *argv[]) {
 
     /* show the ordered array in the screen */
     array_dump(array);
+
+    /* show the data we've analyzed */
+    print_analyzed_data(array);
 
     return (EXIT_SUCCESS);
 }

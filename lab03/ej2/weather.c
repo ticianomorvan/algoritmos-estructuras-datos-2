@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include "weather.h"
 
-static const int AMOUNT_OF_WEATHER_VARS = 6 ;
+static const int AMOUNT_OF_WEATHER_VARS = 6;
 
 Weather weather_from_file(FILE* file)
 {
@@ -13,7 +13,7 @@ Weather weather_from_file(FILE* file)
     
     int result = fscanf(
       file,
-      "%i %i %i %u %u %u\n",
+      EXPECTED_WEATHER_FILE_FORMAT,
       &weather._average_temp,
       &weather._max_temp,
       &weather._min_temp,

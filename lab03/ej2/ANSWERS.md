@@ -1,3 +1,3 @@
 > ¿Qué sucede si compilamos el código original y lo ejecutamos?
 
-Como los valores de la estructura, sin contar los de la fecha, son del tipo `unsigned int` vemos que el resultado arroja valores totalmente errados, producto de no tomarse en cuenta que no son valores signados. Al corregir el problema (completarlo, mejor dicho) vemos que se soluciona este problema, e incluso podemos compilarlo con `-Werror`, lo que nos aleja de este tipo de problemas de tipo.
+Como los valores de la estructura, sin contar los de la fecha y las temperaturas, son del tipo `unsigned int` vemos que el resultado arroja valores totalmente errados, producto de no tomarse en cuenta que no son valores signados, además de que se leen los valores sin seguir ningún patrón ni guardarlos en lugares específicos. Al corregir el código (completarlo, mejor dicho) vemos que se solucionan estos problemas, e incluso podemos compilar con `-Werror`, lo que nos aleja de este tipo de problemas de tipo.
