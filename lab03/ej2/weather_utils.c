@@ -43,20 +43,24 @@ void register_yearly_max_temp(WeatherTable array, int results[]) {
 }
 
 void register_yearly_max_rainfall_month(WeatherTable array, int results[]) {
-  for (int i = 0; i < YEARS; i++) {
+  for (int year = 0; year < YEARS; year++) {
     int max_rainfall_month = 0;
-    unsigned int max_rainfall_of_year = 0u;
+    unsigned int max_rainfall_probabilities = 0u;
 
-    for (int j = 0; j < MONTHS; j++) {
-      for (int k = 0; k < DAYS; k++) {
-        if (array[i][j][k]._rainfall > max_rainfall_of_year) {
-          max_rainfall_of_year = array[i][j][k]._rainfall;
-          max_rainfall_month = j;
-        }
+    for (int month = 0; month < MONTHS; month++) {
+      unsigned int month_rainfall_probabilities = 0u;
+
+      for (int day = 0; day < DAYS; day++) {
+        month_rainfall_probabilities += array[year][month][day]._rainfall;
+      }
+
+      if (month_rainfall_probabilities > max_rainfall_probabilities) {
+        max_rainfall_probabilities = month_rainfall_probabilities;
+        max_rainfall_month = month;
       }
     }
 
-    results[i] = max_rainfall_month;
+    results[year] = max_rainfall_month;
   }
 }
 
