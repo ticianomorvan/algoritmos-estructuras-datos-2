@@ -20,13 +20,12 @@ int main(void) {
     fgets(user_input, MAX_LENGTH, stdin);
     user_input_length = string_length(user_input);
     user_input[user_input_length - 1] = '\0';
-    filtered = string_filter(user_input, ignore_chars[0]);
-    temp_filtered = filtered;
 
+    filtered = string_filter(user_input, ignore_chars[0]);
     for (unsigned int i=0; i < SIZEOF_ARRAY(ignore_chars); i++) {
-        free(filtered);
-        filtered = string_filter(temp_filtered, ignore_chars[i]);
         temp_filtered = filtered;
+        filtered = string_filter(filtered, ignore_chars[i]);
+        free(temp_filtered);
     }
 
     printf("El texto:\n\n"

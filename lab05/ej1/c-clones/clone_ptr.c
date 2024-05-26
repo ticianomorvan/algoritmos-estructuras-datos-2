@@ -5,15 +5,19 @@
 
 #define MAX_LENGTH 1820
 
-char *string_clone(const char *str) {
-    char *output = calloc(strlen(str) + 1, sizeof (char));
-    output = strcpy(output, str);
+char *string_clone(const char *str, size_t length) {
+    char *output = calloc(length + 1, sizeof (char));
+    for (size_t i = 0; i < length; i++) {
+        output[i] = str[i];
+    }
+
+    output[length] = '\0';
     return output;
 }
 
 
 int main(void) {
-    char original[]=""
+    char *original = ""
          "______ time ago in a galaxy far, far away...\n\n\n"
          ANSI_BRGOLD
          "         _______..___________.     ___      .______             \n"
@@ -50,11 +54,12 @@ int main(void) {
          "                an    ARMY    OF   THE   REPUBLIC\n"
          "                to    assist    the   overwhelmed\n"
          "                Jedi....\n" ANSI_WHITE;
-    char *copy=NULL;
 
-    copy = string_clone(original);
+    char *copy = NULL;
+    copy = string_clone(original, strlen(original)); // sizeof(original) = 8
+
     printf("Original:\n" ANSI_CYAN
-            " %s\n", original);
+           " %s\n", original);
     copy[0] = 'A';
     copy[1] = ' ';
     copy[2] = 'l';
@@ -68,3 +73,7 @@ int main(void) {
     return EXIT_SUCCESS;
 }
 
+/*
+    El cambio de tipo rompe la implementación porque al llamar a sizeof (original) obtenemos el tamaño del puntero en sí y no del contenido, por lo que solo estaríamos clonando
+    una cadena de 8 de largo. Usando strlen() obtenemos el largo real de la cadena y podemos utilizar este cambio en el tipo con la implementación anterior.
+*/

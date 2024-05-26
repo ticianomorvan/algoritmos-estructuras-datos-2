@@ -6,11 +6,11 @@
 #define MAX_LENGTH 1820
 
 char *string_clone(const char *str, size_t length) {
-    char clon[MAX_LENGTH];
-    char *output=clon;
-    for (size_t i=0; i<length;i++) {
+    char *output = calloc(length + 1, sizeof (char));
+    for (size_t i = 0; i < length; i++) {
         output[i] = str[i];
     }
+
     output[length] = '\0';
     return output;
 }
@@ -54,11 +54,12 @@ int main(void) {
          "                an    ARMY    OF   THE   REPUBLIC\n"
          "                to    assist    the   overwhelmed\n"
          "                Jedi....\n" ANSI_WHITE;
-    char *copy=NULL;
 
-    copy = string_clone(original, sizeof(original)/sizeof(*original));
+    char *copy = NULL;
+    copy = string_clone(original, sizeof(original) / sizeof(*original)); // sizeof (original) / sizeof(*original) = 1812
+
     printf("Original:\n" ANSI_CYAN
-            " %s\n", original);
+           " %s\n", original);
     copy[0] = 'A';
     copy[1] = ' ';
     copy[2] = 'l';
@@ -68,6 +69,12 @@ int main(void) {
     printf("Copia   :\n" ANSI_CYAN
            " %s\n", copy);
 
+    free(copy);
     return EXIT_SUCCESS;
 }
 
+/*
+    El problema de la implementación era que definiamos de manera estática el tamaño del string que sería el clon del original, lo que provocaba que hubiese problemas al
+    procesar dinámicamente la copia 1 a 1 de la cadena de origen. Una vez reemplazado esa definición estática del tamaño de la cadena por una dinámica basada en el
+    parámetro de entrada "length", pudimos resolver el problema. 
+*/
