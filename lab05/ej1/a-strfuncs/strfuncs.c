@@ -37,20 +37,25 @@ char *string_filter(const char *str, char c) {
 }
 
 bool string_is_symmetric(const char *str) {
+  char start, end;
+  unsigned int i, j;
   bool result = true;
-  char *reversed_str = NULL;
   size_t str_length = string_length(str);
 
-  reversed_str = malloc(sizeof (char) * (str_length + 1));
+  i = 0u;
+  j = str_length - 1;
 
-  for (unsigned i = 0u; i < str_length; ++i) {
-    reversed_str[i] = str[str_length - (i + 1)]; // We create a new string which is our <str> but reversed
+  while (i < j && result) {
+    start = str[i];
+    end = str[j];
+
+    if (start != end) {
+      result = false;
+    }
+
+    ++i;
+    --j;
   }
 
-  for (unsigned j = 0u; j < str_length; ++j) {
-    result = result && str[j] == reversed_str[j]; // We check if we can read it both ways
-  }
-
-  free(reversed_str);
   return result;
 }
