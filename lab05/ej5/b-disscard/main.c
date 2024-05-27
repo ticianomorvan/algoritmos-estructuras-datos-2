@@ -52,11 +52,16 @@ int main(int argc, char *argv[]) {
     
     // parse the file and returns the loaded queue
     queue q=queue_from_file(filepath);
-    
+
     /*dumping the queue */
     printf("length: %u\n", queue_size(q));
     queue_dump(q, stdout);
+
+    q = queue_user_disscard(q);
     
+    printf("length: %u\n", queue_size(q));
+    queue_dump(q, stdout);
+
     q = queue_destroy(q);
     return EXIT_SUCCESS;
 }
