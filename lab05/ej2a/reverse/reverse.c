@@ -55,12 +55,20 @@ int main(int argc, char *argv[]) {
   printf("Original: ");
   array_dump(array, length);
 
-  int *new_array=NULL;
-  /**
-  *
-  *  --- COMPLETAR ----
-  *
-  */
+  int *new_array = NULL;
+  new_array = calloc(length, sizeof (stack_elem));
+  stack s = stack_empty();
+
+  for (unsigned int i = 0u; i < length; ++i) {
+    s = stack_push(s, array[i]);
+  }
+
+  for (unsigned int i = 0u; i < length; ++i) {
+    stack_elem top = stack_top(s);
+    new_array[i] = top;
+    s = stack_pop(s);
+  }
+
   printf("Reversed: ");
   array_dump(new_array, length);
   return (EXIT_SUCCESS);

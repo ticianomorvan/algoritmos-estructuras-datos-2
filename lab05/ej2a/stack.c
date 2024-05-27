@@ -20,7 +20,7 @@ bool stack_is_empty(stack s) {
 stack stack_push(stack s, stack_elem e) {
   stack p = NULL;
 
-  p = malloc(sizeof (stack_elem));
+  p = malloc(sizeof (stack_elem) + sizeof (*s));
   p -> elem = e;
   p -> next = s;
   s = p;
@@ -69,7 +69,7 @@ stack_elem *stack_to_array(stack s) {
     i = size - 1;
   
     while (!stack_is_empty(p)) {
-      stack_elem elem = p -> elem;
+      stack_elem elem = stack_top(p);
       result[i] = elem;
       p = p -> next;
       --i;
@@ -82,12 +82,10 @@ stack_elem *stack_to_array(stack s) {
 stack stack_destroy(stack s) {
   stack p = NULL;
 
-  if (!stack_is_empty(s)) {
-    while (p -> next != NULL) {
-      p = s;
-      s = p -> next;
-      free(p);
-    }
+  while (!stack_is_empty(s)) {
+    p = s;
+    s = p -> next;  
+    free(p);
   }
 
   return s;
