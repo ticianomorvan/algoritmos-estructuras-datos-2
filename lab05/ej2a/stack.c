@@ -5,30 +5,39 @@
 struct _s_stack {
   stack_elem elem;
   stack next;
+  size_t size;
 };
 
 stack stack_empty() {
-  stack new_stack = NULL;
+  stack s = NULL;
+  s = malloc(sizeof (struct _s_stack));
+  s -> next = NULL;
+  s -> size = 0;
 
-  return new_stack;
+  assert(stack_is_empty(s));
+  return s;
 }
 
 bool stack_is_empty(stack s) {
-  return s == NULL;
+  return s -> next == NULL;
 }
 
 stack stack_push(stack s, stack_elem e) {
   stack p = NULL;
 
-  p = malloc(sizeof (stack_elem) + sizeof (*s));
+  p = malloc(sizeof (struct _s_stack));
   p -> elem = e;
   p -> next = s;
+  p -> size = s -> size + 1;
   s = p;
 
+  assert(!stack_is_empty(s));
   return s;
 }
 
 stack stack_pop(stack s) {
+  assert(!stack_is_empty(s));
+
   stack p = NULL;
   p = s;
   s = s -> next;
@@ -38,26 +47,22 @@ stack stack_pop(stack s) {
 }
 
 unsigned int stack_size(stack s) {
-  stack p = NULL;
   unsigned int size = 0u;
 
   if (!stack_is_empty(s)) {
-    p = s;
-    ++size;
-    while (p -> next != NULL) {
-      p = p -> next;
-      ++size;
-    }
-  }
-  
+    size = s -> size;
+  } 
+
   return size;
 }
 
 stack_elem stack_top(stack s) {
+  assert(!stack_is_empty(s));
+
   return s -> elem;
 }
 
-stack_elem *stack_to_array(stack s) {
+stack_elem *stack_to_array(stack s) { 
   stack p = NULL;
   stack_elem *result = NULL;
   unsigned int size, i;
@@ -88,5 +93,9 @@ stack stack_destroy(stack s) {
     free(p);
   }
 
+  free(s);
+  s = NULL;
+
+  assert(s == NULL);
   return s;
 }
