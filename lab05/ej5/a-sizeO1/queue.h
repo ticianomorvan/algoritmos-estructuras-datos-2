@@ -1,8 +1,9 @@
 #ifndef _QUEUE_H_
 #define _QUEUE_H_
 
-#include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef struct s_queue * queue;
 

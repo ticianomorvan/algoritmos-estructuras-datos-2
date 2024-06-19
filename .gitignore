@@ -5,4 +5,6 @@
 
 *.o
 *.out
+**/compile_commands.json
+**/.cache
 .vscode

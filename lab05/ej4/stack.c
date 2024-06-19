@@ -14,7 +14,7 @@ bool invrep(stack s) {
     return s != NULL;
 }
 
-stack stack_empty() {
+stack stack_empty(void) {
     stack s = (stack) malloc(sizeof (struct _s_stack));
     s -> elems = (stack_elem*) malloc(INITIAL_CAPACITY * sizeof (stack_elem));
     s -> size = 0;
@@ -105,3 +105,4 @@ stack stack_destroy(stack s) {
     assert(s == NULL);
     return s;
 }
+
