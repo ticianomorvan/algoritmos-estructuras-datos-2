@@ -62,26 +62,27 @@ abb abb_empty(void) {
 abb abb_add(abb tree, abb_elem e) {
     assert(invrep(tree));
 
-		if (elem_eq(tree->elem, DEFAULT_VALUE)) {
-			tree->elem = e;
-		} else if (elem_less(tree->elem, e)) {
-			if (tree->right != NULL) {
-				abb_add(tree->right, e);
+		if (tree != NULL) {
+			if (elem_eq(tree->elem, DEFAULT_VALUE)) {
+				tree->elem = e;
+			} else if (elem_less(tree->elem, e)) {
+				if (tree->right != NULL) {
+					abb_add(tree->right, e);
+				} else {
+					tree->right = abb_empty();
+					tree->right->elem = e;
+				}
 			} else {
-				tree->right = (abb) malloc(sizeof (struct _s_abb));
-				tree->right->elem = e;
-				tree->right->left = NULL;
-				tree->right->right = NULL;
+				if (tree->left != NULL) {
+					abb_add(tree->left, e);
+				} else {
+					tree->left = abb_empty();
+					tree->left->elem = e;
+				}
 			}
 		} else {
-			if (tree->left != NULL) {
-				abb_add(tree->left, e);
-			} else {
-				tree->left = (abb) malloc(sizeof (struct _s_abb));
-				tree->left->elem = e;
-				tree->left->left = NULL;
-				tree->left->right = NULL;
-			}
+			tree = abb_empty();
+			tree->elem = e;
 		}
 
     assert(invrep(tree) && abb_exists(tree, e));
@@ -127,12 +128,76 @@ unsigned int abb_length(abb tree) {
 
 abb abb_remove(abb tree, abb_elem e) {
     assert(invrep(tree));
+		abb min_leaf;
+		abb selected_tree;
 
-		// If e is equal to the tree's root, we replace it with the right branch and we add the elements from the left branch to it.
-	  // If e is greater than the tree's root, we search for it in the right branch.
-		// If e is less than the tree's root, we search for it in the left branch.
-		if (tree->left == NULL && tree->right == NULL) {
-			abb_destroy(tree);
+		// The element is the tree's root [X]
+		if (tree->left == NULL && tree->right == NULL && elem_eq(tree->elem, e)) {
+			tree = abb_destroy(tree);
+		} else if (tree->right != NULL && elem_eq(tree->right->elem, e)) {
+			selected_tree = tree->right;
+			
+			if (selected_tree->left == NULL && selected_tree->right == NULL) {
+				tree->right = NULL;
+			} else if (selected_tree->left != NULL && selected_tree->right == NULL) {
+				tree->right = selected_tree->left;
+				selected_tree->left = NULL;
+			} else if (selected_tree->right != NULL && selected_tree->left == NULL) {
+				tree->right = selected_tree->right;
+				selected_tree->right = NULL;
+			} else {
+				if (selected_tree->right->left == NULL) {
+					selected_tree->right->left = selected_tree->left;
+				} else {
+					min_leaf = selected_tree->right->left;
+					while (elem_less(selected_tree->left->elem, min_leaf->elem) && min_leaf->left != NULL) {
+						min_leaf = min_leaf->left;
+					}
+
+					min_leaf->left = selected_tree->left;
+				}
+
+				tree->right = selected_tree->right;
+				selected_tree->right = NULL;
+				selected_tree->left = NULL;
+			}
+			
+			abb_destroy(selected_tree);
+		} else if (tree->left != NULL && elem_eq(tree->left->elem, e)) {
+			selected_tree = tree->left;
+
+			if (selected_tree->left == NULL && selected_tree->right == NULL) {
+				tree->left = NULL;
+			} else if (selected_tree->left != NULL) {
+				tree->left = selected_tree->left;
+				selected_tree->left = NULL;
+			} else if (selected_tree->right != NULL) {
+				tree->left = selected_tree->right;
+				selected_tree->right = NULL;
+			} else {
+				if (selected_tree->right->left == NULL) {
+					selected_tree->right->left = selected_tree->left;
+				} else {
+					min_leaf = selected_tree->right->left;
+					while (elem_less(selected_tree->left->elem, min_leaf->elem) && min_leaf->left != NULL) {
+						min_leaf = min_leaf->left;
+					}
+
+					min_leaf->left = selected_tree->left;
+				}
+
+				tree->left = selected_tree->right;
+				selected_tree->right = NULL;
+				selected_tree->left = NULL;
+			}
+
+			abb_destroy(selected_tree);
+		} else {
+			if (elem_less(tree->elem, e)) {
+				abb_remove(tree->right, e);
+			} else {
+				abb_remove(tree->left, e);
+			}
 		}
 
     assert(invrep(tree) && !abb_exists(tree, e));

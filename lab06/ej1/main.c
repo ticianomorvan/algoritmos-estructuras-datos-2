@@ -201,10 +201,10 @@ int main(int argc, char *argv[]) {
 						show_tree(tree);
 						break;
 					case ADD_ELEMENT:
-						add_element(tree);
+						tree = add_element(tree);
 						break;
 					case REMOVE_ELEMENT:
-						remove_element(tree);
+						tree = remove_element(tree);
 						break;
 					case CHECK_ELEMENT:
 						check_element(tree);
