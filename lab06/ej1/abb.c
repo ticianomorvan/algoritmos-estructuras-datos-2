@@ -23,6 +23,14 @@ static bool elem_less(abb_elem a, abb_elem b) {
     return a < b;
 }
 
+/**
+ * A valid tree is:
+ * - A NULL value
+ * - An ABB with both of its branches as NULL
+ * - An ABB with a left branch which is a valid tree itself, and each one of its values is less than the root; the right branch is just NULL.
+ * - An ABB with a right branch which is a valid tree itself, and each one of its values is greater than the root; the left branch is just NULL.
+ * - An ABB with both left and right branches that are valid trees themselves, values are less than the root at the left one and greather than it at the right.
+ */
 static bool invrep(abb tree) {
   	bool is_valid = true;
 
@@ -119,28 +127,12 @@ unsigned int abb_length(abb tree) {
 
 abb abb_remove(abb tree, abb_elem e) {
     assert(invrep(tree));
-		abb tree_left = tree->left;
-		abb tree_left_copy = tree->left;
 
 		// If e is equal to the tree's root, we replace it with the right branch and we add the elements from the left branch to it.
 	  // If e is greater than the tree's root, we search for it in the right branch.
 		// If e is less than the tree's root, we search for it in the left branch.
-		if (elem_eq(tree->elem, e)) {
-			tree = tree->right;
-			
-			while (tree_left != NULL) {
-				abb_add(tree, tree_left->elem);
-				tree_left = tree_left->left;
-			}
-
-			while(tree_left_copy != NULL) {
-				abb_add(tree, tree_left_copy->elem);
-				tree_left_copy = tree_left->right;
-			}
-		} else if (elem_less(e, tree->elem)) {
-			abb_remove(tree->left, e);
-		} else {
-			abb_remove(tree->right, e);
+		if (tree->left == NULL && tree->right == NULL) {
+			abb_destroy(tree);
 		}
 
     assert(invrep(tree) && !abb_exists(tree, e));
@@ -187,20 +179,32 @@ abb_elem abb_min(abb tree) {
 }
 
 void abb_dump(abb tree, abb_ordtype ord) {
-    assert(invrep(tree) /* && (ord==ABB_IN_ORDER  || 
+    assert(invrep(tree) && (ord==ABB_IN_ORDER  || 
                             ord==ABB_PRE_ORDER ||
-                            ord==ABB_POST_ORDER) */);
-    /*
-     * c) Needs implementation: use the dump order indicated by `ord`
-     *
-     */
+                            ord==ABB_POST_ORDER));
 
-    // Implementing in-order as default
-    if (tree != NULL) {
-        abb_dump(tree->left, ord);
-        printf("%d ", tree->elem);
-        abb_dump(tree->right, ord);
-    }
+		if (tree != NULL) {
+			switch (ord) {
+				case ABB_IN_ORDER:
+					abb_dump(tree->left, ord);
+					printf("%d ", tree->elem);
+					abb_dump(tree->right, ord);
+					break;
+				case ABB_PRE_ORDER:
+					printf("%d ", tree->elem);
+					abb_dump(tree->left, ord);
+					abb_dump(tree->right, ord);
+					break;
+				case ABB_POST_ORDER:
+					abb_dump(tree->left, ord);
+					abb_dump(tree->right, ord);
+					printf("%d ", tree->elem);
+					break;
+				default:
+					printf("Please provide a valid ordering format.\n");	
+					break;
+			}
+		}
 }
 
 abb abb_destroy(abb tree) {
